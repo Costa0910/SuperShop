@@ -7,6 +7,8 @@ namespace WebApplication.Data.Entities
     public class Product
     {
         public int Id { get; set; }
+        [Required]
+        [MaxLength(50, ErrorMessage = "The field {0} can contain {1} characters length.")]
         public string Name { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
@@ -16,10 +18,10 @@ namespace WebApplication.Data.Entities
         public string ImageUrl { get; set; }
 
         [DisplayName("Last Purchase")]
-        public DateTime LastParchase { get; set; }
+        public DateTime? LastParchase { get; set; }
 
         [DisplayName("Last Sale")]
-        public DateTime LastSale { get; set; }
+        public DateTime? LastSale { get; set; }
 
         [DisplayName("Is Available")]
         public bool IsAvailable { get; set; }

@@ -29,6 +29,8 @@ namespace WebApplication
             {
                 config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddTransient<SeedDb>();
             services.AddControllersWithViews();
         }
 

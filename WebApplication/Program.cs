@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WebApplication.Data;
 
 namespace WebApplication
 {
@@ -13,7 +9,19 @@ namespace WebApplication
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            SeedData(host);
+            host.Run();
+        }
+
+        private static async void SeedData(IHost host)
+        {
+            var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+            using(var scoped = scopeFactory.CreateScope())
+            {
+                var seeder = scoped.ServiceProvider.GetService<SeedDb>();
+                await seeder.SeedAsync();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
