@@ -9,8 +9,8 @@ namespace WebApplication.Data
     /// </summary>
 	public class SeedDb
 	{
-        public readonly DataContext _dataContext;
-        private Random _random;
+        readonly DataContext _dataContext;
+        Random _random;
 
         public SeedDb(DataContext dataContext)
 		{
@@ -31,7 +31,7 @@ namespace WebApplication.Data
 
         }
 
-        private async Task AddProductAsync(string name)
+        async Task AddProductAsync(string name)
         {
             await _dataContext.Products.AddAsync(new Entities.Product
             {
@@ -45,4 +45,3 @@ namespace WebApplication.Data
         }
     }
 }
-

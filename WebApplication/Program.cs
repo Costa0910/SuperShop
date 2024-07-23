@@ -14,14 +14,13 @@ namespace WebApplication
             host.Run();
         }
 
-        private static async void SeedData(IHost host)
+        static async void SeedData(IHost host)
         {
             var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
-            using(var scoped = scopeFactory.CreateScope())
-            {
-                var seeder = scoped.ServiceProvider.GetService<SeedDb>();
-                await seeder.SeedAsync();
-            }
+            using var scoped = scopeFactory.CreateScope();
+
+            var seeder = scoped.ServiceProvider.GetService<SeedDb>();
+            await seeder.SeedAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

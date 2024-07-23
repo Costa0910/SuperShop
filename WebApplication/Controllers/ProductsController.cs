@@ -12,7 +12,7 @@ namespace WebApplication.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly DataContext _context;
+        readonly DataContext _context;
 
         public ProductsController(DataContext context)
         {
@@ -145,7 +145,7 @@ namespace WebApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);
         }
