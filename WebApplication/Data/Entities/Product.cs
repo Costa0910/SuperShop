@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication.Data.Entities
 {
-    public class Product
+    public class Product : IEntity
     {
         public int Id { get; set; }
-        [Required]
-        [MaxLength(50, ErrorMessage = "The field {0} can contain {1} characters length.")]
+        [Required,MaxLength(50, ErrorMessage = "The field {0} can contain {1} characters length.")]
         public string Name { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]

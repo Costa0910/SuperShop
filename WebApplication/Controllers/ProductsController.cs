@@ -8,24 +8,24 @@ namespace WebApplication.Controllers
 {
     public class ProductsController : Controller
     {
-        readonly IRepository _repository;
+        readonly IProductRepository _productRepository;
 
-        public ProductsController(IRepository repository)
+        public ProductsController(IProductRepository productRepository)
         {
-            _repository = repository;
+            _productRepository = productRepository;
         }
 
         // GET: Products
         public IActionResult Index()
-            => View(_repository.GetProducts());
+            => View(_productRepository.GetAll());
 
         // GET: Products/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var product = _repository.GetProduct(id.Value);
+            var product = await _productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
                 return NotFound();
@@ -46,19 +46,18 @@ namespace WebApplication.Controllers
             if (!ModelState.IsValid)
                 return View(product);
 
-            _repository.AddProduct(product);
-            await _repository.SaveAllAsync();
+            await  _productRepository.CreateAsync(product);
 
             return RedirectToAction(nameof(Index));
         }
 
         // GET: Products/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var product = _repository.GetProduct(id.Value);
+            var product = await _productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
                 return NotFound();
@@ -79,12 +78,11 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _repository.UpdateProduct(product);
-                    await _repository.SaveAllAsync();
+                    await _productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_repository.IsProductExist(id))
+                    if (!await _productRepository.ExistAsync(id))
                         return NotFound();
 
                     throw;
@@ -97,12 +95,12 @@ namespace WebApplication.Controllers
         }
 
         // GET: Products/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var product = _repository.GetProduct(id.Value);
+            var product = await _productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
                 return NotFound();
@@ -114,10 +112,8 @@ namespace WebApplication.Controllers
         [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = _repository.GetProduct(id);
-            _repository.DeleteProduct(product);
-            await _repository.SaveAllAsync();
-
+            var product = await _productRepository.GetByIdAsync(id);
+            await _productRepository.DeleteAsync(product);
             return RedirectToAction(nameof(Index));
         }
     }
