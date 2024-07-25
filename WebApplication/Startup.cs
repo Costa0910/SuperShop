@@ -9,7 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using WebApplication.Data;
+using WebApplication.Data.Entities;
+using WebApplication.Helpers;
 
 namespace WebApplication
 {
@@ -25,10 +28,22 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<User, IdentityRole>(
+                config =>
+                {
+                    config.User.RequireUniqueEmail = true;
+                    config.Password.RequireDigit = false;
+                    config.Password.RequiredUniqueChars = 0;
+                    config.Password.RequireUppercase = false;
+                    config.Password.RequireLowercase = false;
+                    config.Password.RequireNonAlphanumeric = false;
+                }).AddEntityFrameworkStores<DataContext>();
+
             services.AddDbContext<DataContext>(config =>
             {
                 config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddScoped<IUserHelper, UserHelper>();
             services.AddTransient<SeedDb>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
@@ -53,6 +68,7 @@ namespace WebApplication
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
