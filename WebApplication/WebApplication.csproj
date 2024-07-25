@@ -24,8 +24,4 @@
     <Compile Remove="Data\Repository.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\API\" />
-  </ItemGroup>
-
 </Project>
