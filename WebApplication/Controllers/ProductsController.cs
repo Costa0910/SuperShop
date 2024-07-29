@@ -80,7 +80,7 @@ namespace WebApplication.Controllers
                 await using var stream = new FileStream(path, FileMode.Create);
 
                 await model.ImageFile.CopyToAsync(stream);
-                path = $"~/wwwroot/images/products/{newFileName}";
+                path = $"~/images/products/{newFileName}";
             }
 
             var product = ToProduct(model, path);
