@@ -6,9 +6,9 @@
 
 <h1>Product Details</h1>
 
-<div>
+<div class="row">
     <hr />
-    <dl class="row">
+    <dl class="col-md-6">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -20,12 +20,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.LastParchase)
@@ -52,7 +46,14 @@
             @Html.DisplayFor(model => model.Stock)
         </dd>
     </dl>
+    <div class="col-md-4">
+        @if (string.IsNullOrEmpty(Model.ImageUrl) == false)
+        {
+        <img src="@Url.Content(Model.ImageUrl)" alt="Product image" style="width:250px;height:250px;max-width:100%;height:auto;">
+        }
+    </div>
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
     <a asp-action="Index" class="btn btn-primary">Back to List</a>

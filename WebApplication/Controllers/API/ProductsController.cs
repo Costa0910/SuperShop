@@ -8,7 +8,7 @@ namespace WebApplication.Controllers.API
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
+        readonly IProductRepository _productRepository;
 
         public ProductsController(IProductRepository productRepository)
         {
@@ -17,8 +17,6 @@ namespace WebApplication.Controllers.API
 
         [HttpGet]
         public IActionResult Get()
-        {
-            return Ok(_productRepository.GetAll());
-        }
+            => Ok(_productRepository.GetAllWithUsers());
     }
 }

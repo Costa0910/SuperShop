@@ -1,4 +1,4 @@
-﻿@model WebApplication.Data.Entities.Product
+﻿@model WebApplication.Models.ProductViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,56 +6,63 @@
 
 <h1>Edit Product</h1>
 
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="ImageUrl"/>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control"/>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control" type="file"/>
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastParchase" class="control-label"></label>
-                <input asp-for="LastParchase" class="form-control" />
+                <input asp-for="LastParchase" class="form-control"/>
                 <span asp-validation-for="LastParchase" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastSale" class="control-label"></label>
-                <input asp-for="LastSale" class="form-control" />
+                <input asp-for="LastSale" class="form-control"/>
                 <span asp-validation-for="LastSale" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                    <input class="form-check-input" asp-for="IsAvailable"/> @Html.DisplayNameFor(model => model.IsAvailable)
                 </label>
             </div>
             <div class="form-group">
                 <label asp-for="Stock" class="control-label"></label>
-                <input asp-for="Stock" class="form-control" />
+                <input asp-for="Stock" class="form-control"/>
                 <span asp-validation-for="Stock" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary"/>
                 <a asp-action="Index" class="btn btn-success">Back to List</a>
             </div>
         </form>
+    </div>
+    <div class="col-md-4">
+        @if (string.IsNullOrEmpty(Model.ImageUrl) == false)
+        {
+            <img src="@Url.Content(Model.ImageUrl)" alt="Product image" style="width:250px;height:250px;max-width:100%;height:auto;">
+        }
     </div>
 </div>
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
