@@ -40,7 +40,7 @@ namespace WebApplication.Data.Entities
                     return null;
                 }
 
-                return $"https://localhost:5001{ImageUrl.Substring(1)}";
+                return $"https://costa0910-supershop.azurewebsites.net{ImageUrl.Substring(1)}";
             }
         }
     }
