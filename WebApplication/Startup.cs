@@ -45,6 +45,8 @@ namespace WebApplication
             });
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddTransient<SeedDb>();
+            services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddControllersWithViews();

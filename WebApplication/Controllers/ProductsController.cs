@@ -15,11 +15,15 @@ namespace WebApplication.Controllers
     {
         readonly IProductRepository _productRepository;
         readonly IUserHelper _userHelper;
+        readonly IImageHelper _imageHelper;
+        readonly IConverterHelper _converterHelper;
 
-        public ProductsController(IProductRepository productRepository, IUserHelper userHelper)
+        public ProductsController(IProductRepository productRepository, IUserHelper userHelper, IImageHelper imageHelper, IConverterHelper converterHelper)
         {
             _productRepository = productRepository;
             _userHelper = userHelper;
+            _imageHelper = imageHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Products
@@ -40,22 +44,6 @@ namespace WebApplication.Controllers
             return View(product);
         }
 
-        ProductViewModel ToProductViewModel(Product product)
-        {
-            return new ProductViewModel()
-            {
-                Id = product.Id,
-                ImageUrl = product.ImageUrl,
-                IsAvailable = product.IsAvailable,
-                LastParchase = product.LastParchase,
-                LastSale = product.LastSale,
-                Name = product.Name,
-                Price = product.Price,
-                Stock = product.Stock,
-                User = product.User
-            };
-        }
-
         // GET: Products/Create
         public IActionResult Create()
             => View();
@@ -73,39 +61,16 @@ namespace WebApplication.Controllers
 
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                var newFileName = $"{Guid.NewGuid()}.jpg";
-
-                path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\products", newFileName);
-
-                await using var stream = new FileStream(path, FileMode.Create);
-
-                await model.ImageFile.CopyToAsync(stream);
-                path = $"~/images/products/{newFileName}";
+                path = await _imageHelper.UploadImageAsync(model.ImageFile, "products");
             }
 
-            var product = ToProduct(model, path);
+            var product = _converterHelper.ToProduct(model, true, path);
 
             //TODO: change for login user
             product.User = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");
             await _productRepository.CreateAsync(product);
 
             return RedirectToAction(nameof(Index));
-        }
-
-        Product ToProduct(ProductViewModel model, string path)
-        {
-            return new Product()
-            {
-                Id = model.Id,
-                Name = model.Name,
-                ImageUrl = path,
-                IsAvailable = model.IsAvailable,
-                Price = model.Price,
-                LastParchase = model.LastParchase,
-                LastSale = model.LastSale,
-                Stock = model.Stock,
-                User = model.User
-            };
         }
 
         // GET: Products/Edit/5
@@ -119,7 +84,7 @@ namespace WebApplication.Controllers
             if (product == null)
                 return NotFound();
 
-            var model = ToProductViewModel(product);
+            var model = _converterHelper.ToProductViewModel(product);
 
             return View(model);
         }
@@ -138,16 +103,9 @@ namespace WebApplication.Controllers
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-                        var newFileName = $"{Guid.NewGuid()}.jpg";
-
-                        path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\products", newFileName);
-
-                        await using var stream = new FileStream(path, FileMode.Create);
-
-                        await model.ImageFile.CopyToAsync(stream);
-                        path = $"~/wwwroot/images/products/{newFileName}";
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "products");
                     }
-                    var product = ToProduct(model, path);
+                    var product = _converterHelper.ToProduct(model, false, path);
 
                     //TODO: change for login user
                     product.User = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");
