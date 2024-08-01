@@ -33,7 +33,7 @@ namespace WebApplication.Data.Entities
 
         public string ImageFullPath
             => ImageId == Guid.Empty
-                   ? "https://costa0910-supershop.azurewebsites.net/images/noimage.png"
+                   ? "https://costa0910-supershop.azurewebsites.net/images/noimage.jpeg"
                    : $"https://supershop0910.blob.core.windows.net/products/{ImageId}";
     }
 }
