@@ -15,7 +15,7 @@ namespace WebApplication.Data.Entities
         public decimal Price { get; set; }
 
         [DisplayName("Image")]
-        public string ImageUrl { get; set; }
+        public Guid ImageId { get; set; }
 
         [DisplayName("Last Purchase")]
         public DateTime? LastParchase { get; set; }
@@ -32,16 +32,8 @@ namespace WebApplication.Data.Entities
         public User User { get; set; }
 
         public string ImageFullPath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(ImageUrl))
-                {
-                    return null;
-                }
-
-                return $"https://costa0910-supershop.azurewebsites.net{ImageUrl.Substring(1)}";
-            }
-        }
+            => ImageId == Guid.Empty
+                   ? "https://costa0910-supershop.azurewebsites.net/images/noimage.png"
+                   : $"https://supershop0910.blob.core.windows.net/products/{ImageId}";
     }
 }

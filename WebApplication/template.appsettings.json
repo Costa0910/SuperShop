@@ -8,6 +8,9 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localDB)\\MSSQLLocalDB;Database=SuperShop;Trusted_Connection=True;MultipleActiveResultSets=True"
+    "DefaultConnection": "..."
+  },
+  "Blob": {
+    "ImageStorage": "..."
   }
 }

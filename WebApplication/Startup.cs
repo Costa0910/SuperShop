@@ -39,13 +39,14 @@ namespace WebApplication
                     config.Password.RequireNonAlphanumeric = false;
                 }).AddEntityFrameworkStores<DataContext>();
 
-            services.AddDbContext<DataContext>(config =>
-            {
-                config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+            services.AddDbContext<DataContext>(
+                config =>
+                {
+                    config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                });
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddTransient<SeedDb>();
-            services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<IBlobHelper, BlobHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
@@ -62,6 +63,7 @@ namespace WebApplication
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -73,12 +75,13 @@ namespace WebApplication
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseEndpoints(
+                endpoints =>
+                {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                });
         }
     }
 }

@@ -15,14 +15,14 @@ namespace WebApplication.Controllers
     {
         readonly IProductRepository _productRepository;
         readonly IUserHelper _userHelper;
-        readonly IImageHelper _imageHelper;
+        readonly IBlobHelper _blobHelper;
         readonly IConverterHelper _converterHelper;
 
-        public ProductsController(IProductRepository productRepository, IUserHelper userHelper, IImageHelper imageHelper, IConverterHelper converterHelper)
+        public ProductsController(IProductRepository productRepository, IUserHelper userHelper, IBlobHelper blobHelper, IConverterHelper converterHelper)
         {
             _productRepository = productRepository;
             _userHelper = userHelper;
-            _imageHelper = imageHelper;
+            _blobHelper = blobHelper;
             _converterHelper = converterHelper;
         }
 
@@ -57,14 +57,14 @@ namespace WebApplication.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var path = string.Empty;
+            var imageId = Guid.Empty;
 
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                path = await _imageHelper.UploadImageAsync(model.ImageFile, "products");
+                imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
             }
 
-            var product = _converterHelper.ToProduct(model, true, path);
+            var product = _converterHelper.ToProduct(model, true, imageId);
 
             //TODO: change for login user
             product.User = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");
@@ -99,13 +99,13 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    var path = model.ImageUrl;
+                    var imageId = model.ImageId;
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "products");
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
                     }
-                    var product = _converterHelper.ToProduct(model, false, path);
+                    var product = _converterHelper.ToProduct(model, false, imageId);
 
                     //TODO: change for login user
                     product.User = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");

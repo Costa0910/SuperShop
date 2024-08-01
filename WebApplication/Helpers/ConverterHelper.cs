@@ -1,3 +1,4 @@
+using System;
 using WebApplication.Data.Entities;
 using WebApplication.Models;
 
@@ -5,13 +6,13 @@ namespace WebApplication.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
-        public Product ToProduct(ProductViewModel model, bool isNew, string path)
+        public Product ToProduct(ProductViewModel model, bool isNew, Guid imageId)
         {
             return new Product()
             {
                 Id = isNew ? 0 : model.Id,
                 Name = model.Name,
-                ImageUrl = path,
+                ImageId = imageId,
                 IsAvailable = model.IsAvailable,
                 Price = model.Price,
                 LastParchase = model.LastParchase,
@@ -26,7 +27,7 @@ namespace WebApplication.Helpers
             return new ProductViewModel()
             {
                 Id = product.Id,
-                ImageUrl = product.ImageUrl,
+                ImageId = product.ImageId,
                 IsAvailable = product.IsAvailable,
                 LastParchase = product.LastParchase,
                 LastSale = product.LastSale,

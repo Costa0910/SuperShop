@@ -8,7 +8,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <hr />
+    <hr/>
     <div class="row">
         <dl class="col-md-6">
             <dt class="col-sm-2">
@@ -49,16 +49,13 @@
             </dd>
         </dl>
         <div class="col-md-4">
-            @if (string.IsNullOrEmpty(Model.ImageUrl) == false)
-            {
-            <img src="@Url.Content(Model.ImageUrl)" alt="Product image" style="width:250px;height:250px;max-width:100%;height:auto;">
-            }
+            <img src="@Url.Content(Model.ImageFullPath)" alt="Product image" style="width:250px;height:250px;max-width:100%;height:auto;">
         </div>
     </div>
 
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
+        <input type="hidden" asp-for="Id"/>
+        <input type="submit" value="Delete" class="btn btn-danger"/>
         <a asp-action="Index" btn btn-success>Back to List</a>
     </form>
 </div>
