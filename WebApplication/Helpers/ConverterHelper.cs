@@ -15,7 +15,7 @@ namespace WebApplication.Helpers
                 ImageId = imageId,
                 IsAvailable = model.IsAvailable,
                 Price = model.Price,
-                LastParchase = model.LastParchase,
+                LastPurchase = model.LastPurchase,
                 LastSale = model.LastSale,
                 Stock = model.Stock,
                 User = model.User
@@ -29,7 +29,7 @@ namespace WebApplication.Helpers
                 Id = product.Id,
                 ImageId = product.ImageId,
                 IsAvailable = product.IsAvailable,
-                LastParchase = product.LastParchase,
+                LastPurchase = product.LastPurchase,
                 LastSale = product.LastSale,
                 Name = product.Name,
                 Price = product.Price,

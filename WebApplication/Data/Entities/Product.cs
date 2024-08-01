@@ -18,7 +18,7 @@ namespace WebApplication.Data.Entities
         public Guid ImageId { get; set; }
 
         [DisplayName("Last Purchase")]
-        public DateTime? LastParchase { get; set; }
+        public DateTime? LastPurchase { get; set; }
 
         [DisplayName("Last Sale")]
         public DateTime? LastSale { get; set; }
