@@ -29,4 +29,8 @@
     <Folder Include="wwwroot\images\products\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Accountcontroller\Login.cshtml" />
+  </ItemGroup>
+
 </Project>
