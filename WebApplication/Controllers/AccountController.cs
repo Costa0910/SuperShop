@@ -95,7 +95,7 @@ namespace WebApplication.Controllers
             var loginResult = await _userHelper.LoginAsync(loginDetails);
 
             if (loginResult.Succeeded)
-                RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
 
             ModelState.AddModelError(model.Username, "User created, but could not log in. Try login manually");
 
