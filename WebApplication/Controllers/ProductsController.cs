@@ -52,7 +52,7 @@ namespace WebApplication.Controllers
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize]
         public async Task<IActionResult> Create(ProductViewModel model)
         {
             if (!ModelState.IsValid)
@@ -67,8 +67,7 @@ namespace WebApplication.Controllers
 
             var product = _converterHelper.ToProduct(model, true, imageId);
 
-            //TODO: change for login user
-            product.User = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");
+            product.User = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
             await _productRepository.CreateAsync(product);
 
             return RedirectToAction(nameof(Index));
@@ -94,7 +93,7 @@ namespace WebApplication.Controllers
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize,HttpPost,ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductViewModel model)
         {
             if (ModelState.IsValid)
@@ -109,8 +108,7 @@ namespace WebApplication.Controllers
                     }
                     var product = _converterHelper.ToProduct(model, false, imageId);
 
-                    //TODO: change for login user
-                    product.User = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");
+                    product.User = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
                     await _productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
