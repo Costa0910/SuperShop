@@ -61,7 +61,7 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid == false)
                 return View(model);
 
-            var user = _userHelper.GetUserByEmailAsync(model.Username);
+            var user = await _userHelper.GetUserByEmailAsync(model.Username);
 
             if (user != null)
             {
@@ -79,7 +79,7 @@ namespace WebApplication.Controllers
 
             var createResult = await _userHelper.AddUserAsync(newUser, model.Password);
 
-            if (createResult != IdentityResult.Success)
+            if (createResult.Succeeded == false)
             {
                 ModelState.AddModelError(string.Empty, "Could not create the user, try again later!");
 
