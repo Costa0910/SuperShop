@@ -20,9 +20,7 @@ namespace WebApplication.Controllers
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
-            {
                 return RedirectToAction("Index", "Home");
-            }
 
             return View();
         }
@@ -38,20 +36,13 @@ namespace WebApplication.Controllers
             if (result.Succeeded)
             {
                 if (Request.Query.Keys.Contains("ReturnUrl"))
-                {
                     return Redirect(Request.Query["ReturnUrl"].First());
-                }
 
                 return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError(string.Empty, "Problem with your credentials");
 
             return View(model);
-        }
-
-        public IActionResult ChangeUser()
-        {
-            throw new System.NotImplementedException();
         }
 
         public async Task<IActionResult> Logout()
@@ -62,9 +53,7 @@ namespace WebApplication.Controllers
         }
 
         public IActionResult Register()
-        {
-            return View();
-        }
+            => View();
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -77,9 +66,10 @@ namespace WebApplication.Controllers
             if (user != null)
             {
                 ModelState.AddModelError(model.Username, "User already exist!");
+
                 return View(model);
             }
-            var newUser = new User()
+            var newUser = new User
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -92,10 +82,11 @@ namespace WebApplication.Controllers
             if (createResult != IdentityResult.Success)
             {
                 ModelState.AddModelError(string.Empty, "Could not create the user, try again later!");
+
                 return View(model);
             }
 
-            var loginDetails = new LoginViewModel()
+            var loginDetails = new LoginViewModel
             {
                 Username = model.Username,
                 Password = model.Password
@@ -104,12 +95,78 @@ namespace WebApplication.Controllers
             var loginResult = await _userHelper.LoginAsync(loginDetails);
 
             if (loginResult.Succeeded)
-            {
                 RedirectToAction("Index", "Home");
+
+            ModelState.AddModelError(model.Username, "User created, but could not log in. Try login manually");
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> ChangeUser()
+        {
+            var currentUser = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+            var newModel = new ChangeUserViewModel();
+
+            if (currentUser != null)
+            {
+                newModel.FirstName = currentUser.FirstName;
+                newModel.LastName = currentUser.LastName;
             }
 
-            ModelState.AddModelError(model.Username, "User created, but could not login. Try login manually");
-            return View(model);
+            return View(newModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUser(ChangeUserViewModel userViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUser = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+                if (currentUser != null)
+                {
+                    currentUser.FirstName = userViewModel.FirstName;
+                    currentUser.LastName = userViewModel.LastName;
+
+                    var updateResult = await _userHelper.UpdateUserAsync(currentUser);
+
+                    if (updateResult.Succeeded)
+                        ViewBag.userMessage = "User data updated.";
+                    else
+                        ModelState.AddModelError(string.Empty, "User was not updated!");
+                }
+            }
+
+            return View(userViewModel);
+        }
+
+        public IActionResult ChangePassword()
+            => View();
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel passwordViewModel)
+        {
+            if (ModelState.IsValid == false)
+                return View(passwordViewModel);
+
+            var currentUser = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+            if (currentUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "Could not update password!");
+
+                return View(passwordViewModel);
+            }
+
+            var changePasswordResult = await _userHelper.ChangePasswordAsync(currentUser, passwordViewModel.OldPassword, passwordViewModel.NewPassword);
+
+            if (changePasswordResult.Succeeded)
+                return RedirectToAction("ChangeUser");
+
+            ModelState.AddModelError(string.Empty, "Could not update password!");
+
+            return View(passwordViewModel);
         }
     }
 }

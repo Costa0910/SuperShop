@@ -27,5 +27,11 @@ namespace WebApplication.Helpers
 
         public async Task LogoutAsync()
             => await _signInManager.SignOutAsync();
+
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+            => await _userManager.UpdateAsync(user);
+
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
+            => await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
     }
 }
