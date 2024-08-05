@@ -9,11 +9,13 @@ namespace WebApplication.Helpers
     {
         readonly UserManager<User> _userManager;
         readonly SignInManager<User> _signInManager;
+        readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserHelper(UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserHelper(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -33,5 +35,21 @@ namespace WebApplication.Helpers
 
         public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
             => await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
+        public async Task CreateRoleAsync(string role)
+        {
+            var alreadyExist = await _roleManager.RoleExistsAsync(role);
+
+            if (!alreadyExist)
+            {
+                await _roleManager.CreateAsync(new IdentityRole() { Name = role });
+            }
+        }
+
+        public async Task AddUserToRoleAsync(User user, string roleName)
+            => await _userManager.AddToRoleAsync(user, roleName);
+
+        public async Task<bool> IsUserInRoleAsync(User user, string roleName)
+            => await _userManager.IsInRoleAsync(user, roleName);
     }
 }

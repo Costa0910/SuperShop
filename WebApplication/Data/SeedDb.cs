@@ -10,14 +10,14 @@ namespace WebApplication.Data
     /// <summary>
     /// Create Db if not exists and create user admin, seed 3 admin products into table Products
     /// </summary>
-	public class SeedDb
-	{
+    public class SeedDb
+    {
         readonly DataContext _dataContext;
         readonly IUserHelper _userHelper;
         readonly Random _random;
 
         public SeedDb(DataContext dataContext, IUserHelper userHelper)
-		{
+        {
             _dataContext = dataContext;
             _userHelper = userHelper;
             _random = new Random();
@@ -26,6 +26,9 @@ namespace WebApplication.Data
         public async Task SeedAsync()
         {
             await _dataContext.Database.EnsureCreatedAsync();
+
+            await _userHelper.CreateRoleAsync(nameof(Roles.Admin));
+            await _userHelper.CreateRoleAsync(nameof(Roles.Costumer));
 
             var user = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");
 
@@ -43,6 +46,14 @@ namespace WebApplication.Data
                 if (result != IdentityResult.Success)
                     throw new InvalidOperationException("Could not create the user in seeder");
 
+                await _userHelper.AddUserToRoleAsync(user, nameof(Roles.Admin));
+            }
+
+            var isInRole = await _userHelper.IsUserInRoleAsync(user, nameof(Roles.Admin));
+
+            if (!isInRole)
+            {
+                await _userHelper.AddUserToRoleAsync(user, nameof(Roles.Admin));
             }
 
             if (_dataContext.Products.Any() == false)
@@ -52,19 +63,19 @@ namespace WebApplication.Data
                 await AddProductAsync("Samsung s23 ultra", user);
                 await _dataContext.SaveChangesAsync();
             }
-
         }
 
         async Task AddProductAsync(string name, User user)
         {
-            await _dataContext.Products.AddAsync(new Entities.Product
-            {
-                Name = name,
-                Price = _random.Next(100, 1400),
-                IsAvailable = true,
-                Stock = _random.Next(10, 50),
-                User = user
-            });
+            await _dataContext.Products.AddAsync(
+                new Entities.Product
+                {
+                    Name = name,
+                    Price = _random.Next(100, 1400),
+                    IsAvailable = true,
+                    Stock = _random.Next(10, 50),
+                    User = user
+                });
         }
     }
 }

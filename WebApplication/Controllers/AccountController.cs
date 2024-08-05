@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Data;
 using WebApplication.Data.Entities;
 using WebApplication.Helpers;
 using WebApplication.Models;
@@ -85,6 +85,8 @@ namespace WebApplication.Controllers
 
                 return View(model);
             }
+
+            await _userHelper.AddUserToRoleAsync(newUser, nameof(Roles.Costumer));
 
             var loginDetails = new LoginViewModel
             {
