@@ -170,5 +170,8 @@ namespace WebApplication.Controllers
 
             return View(passwordViewModel);
         }
+
+        public IActionResult NotAuthorized()
+            => View();
     }
 }

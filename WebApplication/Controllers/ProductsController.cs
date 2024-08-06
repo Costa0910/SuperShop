@@ -35,12 +35,12 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
 
             var product = await _productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
 
             return View(product);
         }
@@ -132,12 +132,12 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
 
             var product = await _productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
 
             return View(product);
         }
@@ -151,5 +151,8 @@ namespace WebApplication.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult NotFoundViewResult()
+            => View();
     }
 }
