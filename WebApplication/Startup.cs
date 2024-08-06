@@ -53,7 +53,7 @@ namespace WebApplication
             services.ConfigureApplicationCookie(
                 op =>
                 {
-                    op.AccessDeniedPath = "Account/NotAuthorized";
+                    op.AccessDeniedPath = "/Account/NotAuthorized";
                 });
 
             services.AddControllersWithViews();

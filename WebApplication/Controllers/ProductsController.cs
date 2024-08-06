@@ -45,6 +45,7 @@ namespace WebApplication.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = nameof(Roles.Admin))]
         // GET: Products/Create
         public IActionResult Create()
             => View();
@@ -52,7 +53,7 @@ namespace WebApplication.Controllers
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = nameof(Roles.Admin))]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel model)
         {
             if (!ModelState.IsValid)
