@@ -104,5 +104,16 @@ namespace WebApplication.Data
                 await _dataContext.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteDeatilTempAsync(int id)
+        {
+            var detailTemp = await _dataContext.OrderDetailsTemps.FindAsync(id);
+
+            if (detailTemp == null)
+                return;
+
+            _dataContext.OrderDetailsTemps.Remove(detailTemp);
+            await _dataContext.SaveChangesAsync();
+        }
     }
 }
