@@ -26,5 +26,11 @@ namespace WebApplication.Data.Entities
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Value => OrderDetails?.Sum(o => o.Value) ?? 0;
+
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public int Lines => OrderDetails?.Count() ?? 0;
+
+        [Display(Name = "Order date"), DisplayFormat(DataFormatString = "{0:mm/dd/yyyy HH:mm}", ApplyFormatInEditMode = false)]
+        public DateTime? OrderDateLocal => OrderDate.ToLocalTime();
     }
 }

@@ -21,6 +21,9 @@ namespace WebApplication.Controllers
         // GET
         public async Task<IActionResult> Index()
         {
+            if (User.Identity == null)
+                return NotFound();
+
             var model = await _orderRepository.GetOrderAsync(User.Identity.Name);
 
             return View(model);
@@ -28,6 +31,9 @@ namespace WebApplication.Controllers
 
         public async Task<IActionResult> Create()
         {
+            if (User.Identity == null)
+                return NotFound();
+
             var model = await _orderRepository.GetDetailsTempsAsync(User.Identity.Name);
 
             return View(model);
@@ -60,7 +66,8 @@ namespace WebApplication.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            _orderRepository.AddItemToOrderAsync(model, User.Identity.Name);
+            if (User.Identity != null)
+                _orderRepository.AddItemToOrderAsync(model, User.Identity.Name);
 
             return RedirectToAction("Create");
         }
@@ -90,7 +97,21 @@ namespace WebApplication.Controllers
             if (id == null)
                 return NotFound();
 
-            await _orderRepository.DeleteDeatilTempAsync(id.Value);
+            await _orderRepository.DeleteDetailTempAsync(id.Value);
+
+            return RedirectToAction("Create");
+        }
+
+        public async Task<IActionResult> ConfirmOrder()
+        {
+            if (User.Identity == null)
+                return NotFound();
+            var response = await _orderRepository.ConfirmOrderAsync(User.Identity.Name);
+
+            if (response)
+            {
+                RedirectToAction("Index");
+            }
 
             return RedirectToAction("Create");
         }

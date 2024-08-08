@@ -1,3 +1,5 @@
+using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,7 @@ namespace WebApplication.Data
             if (await _userHelper.IsUserInRoleAsync(user, nameof(Roles.Admin)))
             {
                 return _dataContext.Orders
+                                   .Include(o => o.User)
                                    .Include(o => o.OrderDetails)
                                    .ThenInclude(o => o.Product)
                                    .OrderByDescending(o => o.OrderDate);
@@ -105,7 +108,7 @@ namespace WebApplication.Data
             }
         }
 
-        public async Task DeleteDeatilTempAsync(int id)
+        public async Task DeleteDetailTempAsync(int id)
         {
             var detailTemp = await _dataContext.OrderDetailsTemps.FindAsync(id);
 
@@ -114,6 +117,43 @@ namespace WebApplication.Data
 
             _dataContext.OrderDetailsTemps.Remove(detailTemp);
             await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> ConfirmOrderAsync(string userName)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(userName);
+
+            if (user == null)
+                return false;
+
+            var tempOrders = await _dataContext.OrderDetailsTemps
+                                         .Include(o => o.Product)
+                                         .Where(o => o.User == user)
+                                         .ToListAsync();
+
+            if (tempOrders == null || tempOrders.Count == 0)
+                return false;
+
+            var orderDetails = tempOrders.Select(
+                o => new OrderDetails()
+                {
+                    Price = o.Price,
+                    Product = o.Product,
+                    Quantity = o.Quantity,
+                }).ToList();
+
+            var order = new Order()
+            {
+                OrderDate = DateTime.UtcNow,
+                User = user,
+                OrderDetails = orderDetails
+            };
+
+            await CreateAsync(order);
+            _dataContext.OrderDetailsTemps.RemoveRange(tempOrders);
+
+            await _dataContext.SaveChangesAsync();
+            return true;
         }
     }
 }
