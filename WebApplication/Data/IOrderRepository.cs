@@ -7,6 +7,7 @@ namespace WebApplication.Data
     public interface IOrderRepository : IGenericRepository<Order>
     {
         Task<IQueryable<Order>> GetOrderAsync(string userName);
+        Task<IQueryable<OrderDetailsTemp>> GetDetailsTempsAsync(string userName);
 
     }
 }

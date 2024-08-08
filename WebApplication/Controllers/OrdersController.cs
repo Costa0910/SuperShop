@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Data;
+using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
@@ -9,10 +10,12 @@ namespace WebApplication.Controllers
     public class OrdersController : Controller
     {
         readonly IOrderRepository _orderRepository;
+        readonly IProductRepository _productRepository;
 
-        public OrdersController(IOrderRepository orderRepository)
+        public OrdersController(IOrderRepository orderRepository, IProductRepository productRepository)
         {
             _orderRepository = orderRepository;
+            _productRepository = productRepository;
         }
 
         // GET
@@ -23,9 +26,11 @@ namespace WebApplication.Controllers
             return View(model);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            throw new System.NotImplementedException();
+            var model = await _orderRepository.GetDetailsTempsAsync(User.Identity.Name);
+
+            return View(model);
         }
 
         public IActionResult Deliver()
@@ -36,6 +41,17 @@ namespace WebApplication.Controllers
         public IActionResult Delete()
         {
             throw new System.NotImplementedException();
+        }
+
+        public IActionResult AddProduct()
+        {
+            var model = new AddItemViewModel()
+            {
+                Quantity = 1,
+                Products = _productRepository.GetProducts()
+            };
+
+            return View(model);
         }
     }
 }
