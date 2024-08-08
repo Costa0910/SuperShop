@@ -53,5 +53,16 @@ namespace WebApplication.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public IActionResult AddProduct(AddItemViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            _orderRepository.AddItemToOrderAsync(model, User.Identity.Name);
+
+            return RedirectToAction("Create");
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data.Entities;
 using WebApplication.Helpers;
+using WebApplication.Models;
 
 namespace WebApplication.Data
 {
@@ -19,7 +20,6 @@ namespace WebApplication.Data
 
         public async Task<IQueryable<Order>> GetOrderAsync(string userName)
         {
-            //TODO: Check if it's possible to get user by email using user's name
             var user = await _userHelper.GetUserByEmailAsync(userName);
 
             if (user == null)
@@ -42,7 +42,6 @@ namespace WebApplication.Data
 
         public async Task<IQueryable<OrderDetailsTemp>> GetDetailsTempsAsync(string userName)
         {
-            //TODO: Check if it's possible to get user by email using user's name
             var user = await _userHelper.GetUserByEmailAsync(userName);
 
             if (user == null)
@@ -52,6 +51,58 @@ namespace WebApplication.Data
                                .Include(o => o.Product)
                                .Where(o => o.User == user)
                                .OrderByDescending(o => o.Product.Name);
+        }
+
+        public async Task AddItemToOrderAsync(AddItemViewModel model, string userName)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(userName);
+
+            if (user == null)
+                return;
+
+            var product = await _dataContext.Products.FindAsync(model.ProductId);
+
+            if (product == null)
+                return;
+
+            var orderDetailTemp = await _dataContext.OrderDetailsTemps
+                                                    .Where(odt => odt.User == user && odt.Product == product)
+                                                    .FirstOrDefaultAsync();
+
+            if (orderDetailTemp == null)
+            {
+                orderDetailTemp = new()
+                {
+                    Price = product.Price,
+                    Quantity = model.Quantity,
+                    Product = product,
+                    User = user
+                };
+
+                _dataContext.OrderDetailsTemps.Add(orderDetailTemp);
+            }
+            else
+            {
+                orderDetailTemp.Quantity += model.Quantity;
+                _dataContext.OrderDetailsTemps.Update(orderDetailTemp);
+            }
+
+            await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task ModifyOrderDetailTempQuantityAsync(int id, double quantity)
+        {
+            var orderDetailTemp = await _dataContext.OrderDetailsTemps.FindAsync(id);
+
+            if (orderDetailTemp == null)
+                return;
+
+            orderDetailTemp.Quantity += quantity;
+
+            if (orderDetailTemp.Quantity > 0)
+            {
+                await _dataContext.SaveChangesAsync();
+            }
         }
     }
 }
