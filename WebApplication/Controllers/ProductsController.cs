@@ -45,7 +45,7 @@ namespace WebApplication.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = nameof(Roles.Admin))]
+
         // GET: Products/Create
         public IActionResult Create()
             => View();
@@ -127,7 +127,7 @@ namespace WebApplication.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = nameof(Roles.Admin))]
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
