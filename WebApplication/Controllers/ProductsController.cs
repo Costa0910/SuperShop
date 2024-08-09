@@ -161,7 +161,7 @@ namespace WebApplication.Controllers
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
                     ViewBag.ErrorTitle = $"{product.Name} provavelmente está a ser usado!!";
-                    ViewBag.ErrorMessage = $"{product.Name} não pode ser apagado visto haverem encomendas que o usam.‹br/>" +
+                    ViewBag.ErrorMessage = $"{product.Name} não pode ser apagado visto haverem encomendas que o usam.<br/>" +
                                            "Experimente primeiro apagar todas as encomendas que o estão a usar," +
                                            "e torne novamente a apagá-lo";
                 }

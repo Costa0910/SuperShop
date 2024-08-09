@@ -61,13 +61,13 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProduct(AddItemViewModel model)
+        public async Task<IActionResult> AddProductAsync(AddItemViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
             if (User.Identity != null)
-                _orderRepository.AddItemToOrderAsync(model, User.Identity.Name);
+                await _orderRepository.AddItemToOrderAsync(model, User.Identity.Name);
 
             return RedirectToAction("Create");
         }
@@ -110,7 +110,7 @@ namespace WebApplication.Controllers
 
             if (response)
             {
-                RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return RedirectToAction("Create");
