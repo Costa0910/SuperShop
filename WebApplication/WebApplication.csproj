@@ -32,6 +32,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Accountcontroller\Login.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Orders\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Errors\Error404.cshtml" />
   </ItemGroup>
 
 </Project>

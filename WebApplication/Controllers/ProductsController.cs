@@ -148,9 +148,25 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
-            await _productRepository.DeleteAsync(product);
 
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _productRepository.DeleteAsync(product);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{product.Name} provavelmente está a ser usado!!";
+                    ViewBag.ErrorMessage = $"{product.Name} não pode ser apagado visto haverem encomendas que o usam.‹br/>" +
+                                           "Experimente primeiro apagar todas as encomendas que o estão a usar," +
+                                           "e torne novamente a apagá-lo";
+                }
+
+                return View("Error");
+            }
         }
 
         public IActionResult NotFoundViewResult()
