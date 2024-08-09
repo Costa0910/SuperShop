@@ -47,6 +47,7 @@ namespace WebApplication.Controllers
 
 
         // GET: Products/Create
+        [Authorize]
         public IActionResult Create()
             => View();
 

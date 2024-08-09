@@ -56,7 +56,7 @@ namespace WebApplication
                 {
                     op.AccessDeniedPath = "/Account/NotAuthorized";
                 });
-
+             
             services.AddControllersWithViews();
         }
 
@@ -75,7 +75,7 @@ namespace WebApplication
                 app.UseHsts();
             }
 
-            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
