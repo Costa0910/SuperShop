@@ -7,6 +7,7 @@
     <title>@ViewData["Title"] - WebApplication</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.min.css"/>
     @*Add google fonts*@
     <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css"/>
@@ -38,6 +39,9 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Roles</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
                                 </li>
                             </ul >
                         </li>
@@ -85,6 +89,7 @@
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.minjs"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>

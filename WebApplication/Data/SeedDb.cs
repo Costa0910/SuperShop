@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -31,16 +32,40 @@ namespace WebApplication.Data
             await _userHelper.CreateRoleAsync(nameof(Roles.Admin));
             await _userHelper.CreateRoleAsync(nameof(Roles.Costumer));
 
+            if (!await _dataContext.Countries.AnyAsync())
+            {
+                var cities = new List<City>()
+                {
+                    new City() { Name = "Lisboa" },
+                    new City() { Name = "Porto" },
+                    new City() { Name = "Faro" },
+
+                };
+
+                _dataContext.Countries.Add(new Country()
+                {
+                    Name = "Portugal",
+                    Cities = cities
+                });
+
+                await _dataContext.SaveChangesAsync();
+            }
+
             var user = await _userHelper.GetUserByEmailAsync("Costa0910@gmail.com");
 
             if (user == null)
             {
+                var country = await _dataContext.Countries.Include(c => c.Cities).FirstOrDefaultAsync();
+
                 user = new User()
                 {
                     FirstName = "Costa",
                     LastName = "0910",
                     Email = "Costa0910@gmail.com",
-                    UserName = "Costa0910@gmail.com"
+                    UserName = "Costa0910@gmail.com",
+                    Address = "Rua antonio",
+                    CityId = country.Cities.FirstOrDefault().Id,
+                    City = country.Cities.FirstOrDefault()
                 };
                 var result = await _userHelper.AddUserAsync(user, "123456");
 

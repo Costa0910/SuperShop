@@ -1,8 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Data;
 using WebApplication.Models;
+using WebApplication.Views;
 
 namespace WebApplication.Controllers
 {
@@ -39,15 +41,39 @@ namespace WebApplication.Controllers
             return View(model);
         }
 
-        public IActionResult Deliver()
+        public async Task<IActionResult> Deliver(int? id)
         {
-            throw new System.NotImplementedException();
+            if (id == null)
+                return NotFound();
+
+            var order = await _orderRepository.GetOrderAsync(id.Value);
+
+            if (order == null)
+                return NotFound();
+
+            var model = new DeliveryViewModel()
+            {
+                Id = id.Value,
+                DeliveryDate = DateTime.Today
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Deliver(DeliveryViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _orderRepository.DeliveryOrder(model);
+
+            return RedirectToAction("Index");
+
         }
 
         public IActionResult Delete()
-        {
-            throw new System.NotImplementedException();
-        }
+            => throw new System.NotImplementedException();
 
         public IActionResult AddProduct()
         {

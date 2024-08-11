@@ -11,6 +11,8 @@ namespace WebApplication.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<OrderDetailsTemp> OrderDetailsTemps { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         // protected override void OnModelCreating(ModelBuilder builder)
