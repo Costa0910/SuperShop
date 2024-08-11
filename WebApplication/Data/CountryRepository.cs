@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data.Entities;
 using WebApplication.Models;
@@ -65,6 +67,39 @@ namespace WebApplication.Data
             await _dataContext.SaveChangesAsync();
 
             return country.Id;
+        }
+
+        public IEnumerable<SelectListItem> GetComboCountries()
+        {
+            var list = _dataContext.Countries.Select(
+                c => new SelectListItem()
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }).OrderBy(l => l.Text).ToList();
+
+            list.Insert(0, new() {Text = "(Select a country...)", Value = "0", Selected = true});
+
+            return list;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetComboCitiesAsync(int countryId)
+        {
+            var country = await _dataContext.Countries.Include(c => c.Cities).Where(c => c.Id == countryId).FirstOrDefaultAsync();
+
+            if (country == null)
+                return new List<SelectListItem>();
+
+            var list = country.Cities.Select(
+                c => new SelectListItem()
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }).OrderBy(l => l.Text).ToList();
+
+            list.Insert(0, new() { Text = "(Select a city...)", Value = "0", Selected = true });
+
+            return list;
         }
 
         public async Task<Country> GetCountryAsync(City city)

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication.Data;
 using WebApplication.Data.Entities;
 using WebApplication.Helpers;
@@ -11,10 +13,12 @@ namespace WebApplication.Controllers
     public class AccountController : Controller
     {
         readonly IUserHelper _userHelper;
+        readonly ICountryRepository _countryRepository;
 
-        public AccountController(IUserHelper userHelper)
+        public AccountController(IUserHelper userHelper, ICountryRepository countryRepository)
         {
             _userHelper = userHelper;
+            _countryRepository = countryRepository;
         }
 
         public IActionResult Login()
@@ -52,8 +56,16 @@ namespace WebApplication.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Register()
-            => View();
+        public async Task<IActionResult> Register()
+        {
+            var model = new RegisterViewModel
+            {
+                Countries = _countryRepository.GetComboCountries(),
+                Cities = await _countryRepository.GetComboCitiesAsync(0)
+            };
+
+            return View(model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -69,12 +81,19 @@ namespace WebApplication.Controllers
 
                 return View(model);
             }
+
+            var city = await _countryRepository.GetCityAsync(model.CityId);
+
             var newUser = new User
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 UserName = model.Username,
-                Email = model.Username
+                Email = model.Username,
+                Address = model.Address,
+                PhoneNumber = model.PhoneNumber,
+                CityId = model.CityId,
+                City = city
             };
 
             var createResult = await _userHelper.AddUserAsync(newUser, model.Password);
@@ -114,7 +133,25 @@ namespace WebApplication.Controllers
             {
                 newModel.FirstName = currentUser.FirstName;
                 newModel.LastName = currentUser.LastName;
+                newModel.Address = currentUser.Address;
+                newModel.PhoneNumber = currentUser.PhoneNumber;
+                var city = await _countryRepository.GetCityAsync(currentUser.CityId);
+
+                if (city != null)
+                {
+                    var country = await _countryRepository.GetCountryAsync(city);
+
+                    if (country != null)
+                    {
+                        newModel.CountryId = country.Id;
+                        newModel.CityId = city.Id;
+                        newModel.Cities = await _countryRepository.GetComboCitiesAsync(country.Id);
+                        newModel.Countries = _countryRepository.GetComboCountries();
+                    }
+                }
             }
+            newModel.Cities = await _countryRepository.GetComboCitiesAsync(newModel.CountryId);
+            newModel.Countries = _countryRepository.GetComboCountries();
 
             return View(newModel);
         }
@@ -128,8 +165,13 @@ namespace WebApplication.Controllers
 
                 if (currentUser != null)
                 {
+                    var city = await _countryRepository.GetCityAsync(userViewModel.CityId);
                     currentUser.FirstName = userViewModel.FirstName;
                     currentUser.LastName = userViewModel.LastName;
+                    currentUser.Address = userViewModel.Address;
+                    currentUser.PhoneNumber = userViewModel.PhoneNumber;
+                    currentUser.CityId = userViewModel.CityId;
+                    currentUser.City = city;
 
                     var updateResult = await _userHelper.UpdateUserAsync(currentUser);
 
@@ -173,5 +215,14 @@ namespace WebApplication.Controllers
 
         public IActionResult NotAuthorized()
             => View();
+
+        [HttpPost, Route("/Account/GetCitiesAsync")]
+        public async Task<JsonResult> GetCitiesAsync(int countryId)
+        {
+            var country = await _countryRepository.GetCountryWithCitiesAsync(countryId);
+
+            return Json(country.Cities.OrderBy(c => c.Name));
+        }
+
     }
 }
