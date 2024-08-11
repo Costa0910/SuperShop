@@ -66,26 +66,24 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     <script type="text/javascript">
-$(document).ready(function () {
-    var id = 0;
+        var id = 0;
+        // show dialog
+        $(document).ready(function () {
+            $("a[id*=btnDelete]").click(function () {
+                id = $(this).parent()[0].id;
+                $("#deleteDialog").modal("show");
+                return false;
+            });
 
-    $("a[id*=btnDelete]").click(function () {
-        //debugger;
+            $("#btnNoDelete").click(function () {
+                $("#deleteDialog").modal("hide");
+                return false;
+            });
 
-        id = $(this).parent[0].id;
-        ("#deleteDialog").modal("show");
-
-        return false;
-    });
-
-    $("#btnNoDelete").click(function() {
-        $("#deleteDialog").modal("hide");
-        return false
-    });
-
-    $("#btnYesDelete").click(function () {
-        window.location.href = "/Countries/Delete/" + id;
-    });
-});
-</script>
+            $("#btnYesDelete").click(function () {
+                $("#deleteDialog").modal("hide");
+                location.href = "/Countries/Delete/" + id;
+            });
+        });
+    </script>
 }
