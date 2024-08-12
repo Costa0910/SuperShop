@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication.Data;
 using WebApplication.Data.Entities;
 using WebApplication.Helpers;
 using WebApplication.Models;
+using WebApplication.Views;
 
 namespace WebApplication.Controllers
 {
@@ -116,6 +115,7 @@ namespace WebApplication.Controllers
             }
 
             await _userHelper.AddUserToRoleAsync(newUser, nameof(Roles.Costumer));
+
             //
             // var loginDetails = new LoginViewModel
             // {
@@ -135,16 +135,16 @@ namespace WebApplication.Controllers
                 },
                 protocol: HttpContext.Request.Scheme);
 
-            var response = _mailHelper.SendMail(model.Username, "Email confirmation",
-                $"<h1>Confirm you Account</h1> <p>To allow user, please click in this link: <br/> <a href='{confirmLink}'>Confirm you Account</a></p>"
-                );
-
+            var response = _mailHelper.SendMail(
+                model.Username,
+                "Email confirmation",
+                $"<h1>Confirm your Account</h1> <p>To complete registration, please click in this link: <br/> <a href='{confirmLink}'>Confirm your email</a></p>");
 
             //var loginResult = await _userHelper.LoginAsync(loginDetails);
 
             if (response.IsSuccess)
             {
-                ViewBag.Message = "The instructions to allow you user has been sent to email";
+                ViewBag.Message = "The instructions to confirm your email has been sent.";
 
                 return View(model);
             }
@@ -253,8 +253,6 @@ namespace WebApplication.Controllers
 
                 if (user != null)
                 {
-
-
                     var result = await _userHelper.ValidatePasswordAsync(user, model.Password);
 
                     if (result.Succeeded)
@@ -272,15 +270,13 @@ namespace WebApplication.Controllers
                             _configuration["Tokens:Audience"],
                             claims,
                             expires: DateTime.UtcNow.AddDays(15),
-                            signingCredentials: credentials
-                            );
+                            signingCredentials: credentials);
 
                         var results = new
                         {
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo
                         };
-
 
                         return Created(string.Empty, results);
                     }
@@ -293,11 +289,9 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (!ModelState.IsValid)
-            {
                 return NotFound();
-            }
 
-            var user = await  _userHelper.GetUserByIdAsync(userId);
+            var user = await _userHelper.GetUserByIdAsync(userId);
 
             if (user == null)
                 return NotFound();
@@ -305,11 +299,89 @@ namespace WebApplication.Controllers
             var result = await _userHelper.ConfirmEmailAsync(user, token);
 
             if (!result.Succeeded)
-            {
                 return NotFound();
-            }
 
             return View();
+        }
+
+        public IActionResult RecoverPassword()
+            => View();
+
+        [HttpPost]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "The email doesn't correspond to a registered user.");
+
+                    return View(model);
+                }
+                var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+
+                var link = Url.Action(
+                    "ResetPassword",
+                    "Account",
+                    new { token = myToken },
+                    protocol: HttpContext.Request.Scheme);
+
+                var response = _mailHelper.SendMail(
+                    model.Email,
+                    "SuperShop password reset",
+                    $"<h1>SuperShop</h1> <p>To reset your password click in the link below: <br/> <a href='{link}'>Reset password</a></p>");
+
+                if (response.IsSuccess)
+                    ViewBag.Message = "The instructions to recover your password has been sent to email";
+
+                return View();
+            }
+
+            return View(model);
+        }
+
+        public IActionResult ResetPassword(string token) {
+            if (!ModelState.IsValid)
+                return View();
+
+            var model = new ResetPasswordViewModel()
+            {
+                Token = token
+            };
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userHelper.GetUserByEmailAsync(model.Username);
+
+            if (user != null)
+            {
+                var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+
+                if (result.Succeeded)
+                {
+                    ViewBag.Message = "Password reset successful.";
+
+                    return View();
+                }
+
+                ViewBag.Message = "Error while resetting the password.";
+
+                return View(model);
+            }
+
+            ViewBag.Message = "User not found.";
+
+            return View(model);
         }
 
         public IActionResult NotAuthorized()
@@ -322,6 +394,5 @@ namespace WebApplication.Controllers
 
             return Json(country.Cities.OrderBy(c => c.Name));
         }
-
     }
 }

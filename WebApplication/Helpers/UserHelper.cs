@@ -65,5 +65,11 @@ namespace WebApplication.Helpers
 
         public async Task<User> GetUserByIdAsync(string userId)
             => await _userManager.FindByIdAsync(userId);
+
+        public async Task<string> GeneratePasswordResetTokenAsync(User user)
+            => await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        public async Task<IdentityResult> ResetPasswordAsync(User user, string token, string newPassword)
+            => await _userManager.ResetPasswordAsync(user, token, newPassword);
     }
 }
