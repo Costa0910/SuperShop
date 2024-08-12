@@ -12,5 +12,17 @@
   },
   "Blob": {
     "ImageStorage": "..."
+  },
+  "Tokens": {
+    "Key": "...",
+    "Issuer": "...",
+    "Audience": "..."
+  },
+  "Mail": {
+    "NameFrom": "...",
+    "From": "...",
+    "Smtp": "...",
+    "Port": "...",
+    "Password": "..."
   }
 }
