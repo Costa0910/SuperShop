@@ -16,5 +16,6 @@ namespace WebApplication.Helpers
         Task CreateRoleAsync(string role);
         Task AddUserToRoleAsync(User user, string roleName);
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+        Task<SignInResult> ValidatePasswordAsync(User user, string password);
     }
 }

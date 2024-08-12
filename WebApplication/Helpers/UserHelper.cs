@@ -51,5 +51,8 @@ namespace WebApplication.Helpers
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
             => await _userManager.IsInRoleAsync(user, roleName);
+
+        public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
+            => await _signInManager.CheckPasswordSignInAsync(user, password, false);
     }
 }

@@ -8,8 +8,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using WebApplication.Data;
 using WebApplication.Data.Entities;
 using WebApplication.Helpers;
@@ -38,6 +40,19 @@ namespace WebApplication
                     config.Password.RequireLowercase = false;
                     config.Password.RequireNonAlphanumeric = false;
                 }).AddEntityFrameworkStores<DataContext>();
+
+            services.AddAuthentication()
+                    .AddCookie()
+                    .AddJwtBearer(
+                        config =>
+                        {
+                            config.TokenValidationParameters = new TokenValidationParameters()
+                            {
+                                ValidIssuer = Configuration["Tokens:Issuer"],
+                                ValidAudience = Configuration["Tokens:Audience"],
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                            };
+                        });
 
             services.AddDbContext<DataContext>(
                 config =>
