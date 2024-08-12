@@ -21,12 +21,14 @@ namespace WebApplication.Controllers
         readonly IConfiguration _configuration;
         readonly IUserHelper _userHelper;
         readonly ICountryRepository _countryRepository;
+        readonly IMailHelper _mailHelper;
 
-        public AccountController(IConfiguration configuration, IUserHelper userHelper, ICountryRepository countryRepository)
+        public AccountController(IConfiguration configuration, IUserHelper userHelper, ICountryRepository countryRepository, IMailHelper mailHelper)
         {
             _configuration = configuration;
             _userHelper = userHelper;
             _countryRepository = countryRepository;
+            _mailHelper = mailHelper;
         }
 
         public IActionResult Login()
@@ -114,19 +116,40 @@ namespace WebApplication.Controllers
             }
 
             await _userHelper.AddUserToRoleAsync(newUser, nameof(Roles.Costumer));
+            //
+            // var loginDetails = new LoginViewModel
+            // {
+            //     Username = model.Username,
+            //     Password = model.Password
+            // };
 
-            var loginDetails = new LoginViewModel
+            var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(newUser);
+
+            var confirmLink = Url.Action(
+                "ConfirmEmail",
+                "Account",
+                new
+                {
+                    userId = newUser.Id,
+                    token = myToken
+                },
+                protocol: HttpContext.Request.Scheme);
+
+            var response = _mailHelper.SendMail(model.Username, "Email confirmation",
+                $"<h1>Confirm you Account</h1> <p>To allow user, please click in this link: <br/> <a href='{confirmLink}'>Confirm you Account</a></p>"
+                );
+
+
+            //var loginResult = await _userHelper.LoginAsync(loginDetails);
+
+            if (response.IsSuccess)
             {
-                Username = model.Username,
-                Password = model.Password
-            };
+                ViewBag.Message = "The instructions to allow you user has been sent to email";
 
-            var loginResult = await _userHelper.LoginAsync(loginDetails);
+                return View(model);
+            }
 
-            if (loginResult.Succeeded)
-                return RedirectToAction("Index", "Home");
-
-            ModelState.AddModelError(model.Username, "User created, but could not log in. Try login manually");
+            ModelState.AddModelError(model.Username, "User could not be logged.");
 
             return View(model);
         }
@@ -267,6 +290,28 @@ namespace WebApplication.Controllers
             return BadRequest();
         }
 
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (!ModelState.IsValid)
+            {
+                return NotFound();
+            }
+
+            var user = await  _userHelper.GetUserByIdAsync(userId);
+
+            if (user == null)
+                return NotFound();
+
+            var result = await _userHelper.ConfirmEmailAsync(user, token);
+
+            if (!result.Succeeded)
+            {
+                return NotFound();
+            }
+
+            return View();
+        }
+
         public IActionResult NotAuthorized()
             => View();
 
@@ -277,5 +322,6 @@ namespace WebApplication.Controllers
 
             return Json(country.Cities.OrderBy(c => c.Name));
         }
+
     }
 }

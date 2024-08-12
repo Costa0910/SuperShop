@@ -73,6 +73,9 @@ namespace WebApplication.Data
                     throw new InvalidOperationException("Could not create the user in seeder");
 
                 await _userHelper.AddUserToRoleAsync(user, nameof(Roles.Admin));
+
+                var token = await  _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
 
             var isInRole = await _userHelper.IsUserInRoleAsync(user, nameof(Roles.Admin));

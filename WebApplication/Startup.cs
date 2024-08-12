@@ -33,13 +33,17 @@ namespace WebApplication
             services.AddIdentity<User, IdentityRole>(
                 config =>
                 {
+                    config.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                    config.SignIn.RequireConfirmedEmail = true;
                     config.User.RequireUniqueEmail = true;
                     config.Password.RequireDigit = false;
                     config.Password.RequiredUniqueChars = 0;
                     config.Password.RequireUppercase = false;
                     config.Password.RequireLowercase = false;
                     config.Password.RequireNonAlphanumeric = false;
-                }).AddEntityFrameworkStores<DataContext>();
+                })
+                    .AddDefaultTokenProviders()
+                    .AddEntityFrameworkStores<DataContext>();
 
             services.AddAuthentication()
                     .AddCookie()
@@ -63,6 +67,8 @@ namespace WebApplication
             services.AddTransient<SeedDb>();
             services.AddScoped<IBlobHelper, BlobHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IMailHelper, MailHelper>();
+
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
