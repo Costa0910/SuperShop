@@ -29,5 +29,14 @@ namespace WebApplication.Data
         //
         //     base.OnModelCreating(builder);
         // }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
+            builder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18,2)");
+            builder.Entity<OrderDetails>().Property(p => p.Price).HasColumnType("decimal(18,2)");
+            builder.Entity<OrderDetailsTemp>().Property(p => p.Price).HasColumnType("decimal(18,2)");
+            base.OnModelCreating(builder);
+        }
     }
 }

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Vereyon.Web;
 using WebApplication.Data;
 using WebApplication.Data.Entities;
 using WebApplication.Helpers;
@@ -63,6 +64,7 @@ namespace WebApplication
                 {
                     config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 });
+            services.AddFlashMessage();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddTransient<SeedDb>();
             services.AddScoped<IBlobHelper, BlobHelper>();

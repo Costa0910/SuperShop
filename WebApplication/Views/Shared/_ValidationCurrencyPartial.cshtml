@@ -1,2 +1,5 @@
-@model TModel
-
+<script>
+$.validator.methods. number = function (value, element) {
+    return this.optional(element) || !isNaN(parseFloat(value));
+}
+</script>

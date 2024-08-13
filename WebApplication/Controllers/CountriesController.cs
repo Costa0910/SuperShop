@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vereyon.Web;
 using WebApplication.Data;
 using WebApplication.Data.Entities;
 using WebApplication.Models;
@@ -11,10 +13,12 @@ namespace WebApplication.Controllers
     public class CountriesController : Controller
     {
         readonly ICountryRepository _countryRepository;
+        readonly IFlashMessage _flashMessage;
 
-        public CountriesController(ICountryRepository countryRepository)
+        public CountriesController(ICountryRepository countryRepository, IFlashMessage flashMessage)
         {
             _countryRepository = countryRepository;
+            _flashMessage = flashMessage;
         }
 
         // GET
@@ -112,9 +116,18 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _countryRepository.CreateAsync(country);
+                try
+                {
+                    await _countryRepository.CreateAsync(country);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
 
-                return RedirectToAction(nameof(Index));
+                    _flashMessage.Danger("The country already exist!");
+                }
+
             }
 
             return View(country);
