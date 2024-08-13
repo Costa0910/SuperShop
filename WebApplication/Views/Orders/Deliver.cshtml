@@ -34,15 +34,12 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-   @*  Faltava so adicionar esta script para tudo funcionar *@
-    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
-    var lang = navigator.language || navigator.userLanguage;
-    var op = $.extend({}, $.datepicker.regional[pt-Pt], {dateFormat: "dd/mm/yyyy", orientation: "bottom",
-        autoclose: true});
-        //$('.date').datepicker(op);
-        $(".date").datepicker(op);
+            $(document).ready(function (){
+            $('.date').datepicker({
+                orientation: "bottom",
+                autoclose: true
+            })
         });
     </script>
 }
