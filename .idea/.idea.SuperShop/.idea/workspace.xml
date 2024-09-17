@@ -8,19 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6be3107-816c-41c9-9bd5-595380e658be" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/WebApplication/Controllers/AccountController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApplication/Models/LoginViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebApplication/Views/Account/Login.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperShop/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApplication/Controllers/ProductsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebApplication/Controllers/ProductsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApplication/Helpers/IUserHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebApplication/Helpers/IUserHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApplication/Helpers/UserHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/WebApplication/Helpers/UserHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApplication/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/WebApplication/Views/Shared/_Layout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebApplication/WebApplication.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/WebApplication/WebApplication.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,11 +23,22 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {}
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:Costa0910/SuperShop.git&quot;,
+    &quot;accountId&quot;: &quot;48f60c12-2692-417c-b7da-5c88f8b9bdda&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/WebApplication/Data/Repository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2b4685bdfe7b4ed9bc1a82f9482d06881fd88/27/38b50bce/Controller.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4760dfd36d204edba95018ae466c1ad6cf88/2f/a94593e6/HttpRequest.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -51,30 +53,26 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.WebApplication.executor": "Run",
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Azure - Publish Web App.Publish WebApplication to Azure (1).executor": "Run",
-    "Azure - Publish Web App.Publish WebApplication to Azure (2).executor": "Run",
-    "Azure - Publish Web App.Publish WebApplication to Azure (3).executor": "Run",
-    "Azure - Publish Web App.Publish WebApplication to Azure.executor": "Run",
-    "Publish to IIS.Publish SuperShop to IIS.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
-  },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "/Users/costa/Library/Application Support/JetBrains/Rider2024.1/resharper-host/DecompilerCache",
-      "/Users/costa/Library/Application Support/JetBrains/Rider2024.1/resharper-host/SourcesCache",
-      "/Users/costa/Library/Application Support/Symbols/src"
-    ]
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.WebApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Azure - Publish Web App.Publish WebApplication to Azure (1).executor&quot;: &quot;Run&quot;,
+    &quot;Azure - Publish Web App.Publish WebApplication to Azure (2).executor&quot;: &quot;Run&quot;,
+    &quot;Azure - Publish Web App.Publish WebApplication to Azure (3).executor&quot;: &quot;Run&quot;,
+    &quot;Azure - Publish Web App.Publish WebApplication to Azure.executor&quot;: &quot;Run&quot;,
+    &quot;Publish to IIS.Publish SuperShop to IIS.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.WebApplication">
     <configuration name="Publish WebApplication to Azure (1)" type="AzureDotNetWebAppPublish" factoryName="Azure Web App">
       <option name="AZURE_WEB_APP_PROJECT" value="$PROJECT_DIR$/WebApplication/WebApplication.csproj" />
@@ -243,13 +241,50 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="Mobile.Android" type="XamarinAndroidProject" factoryName="Xamarin.Android">
+      <option name="PROJECT_PATH" value="$USER_HOME$/Projects/TestMac/TestMac.Android/Mobile.Android.csproj" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="DEPLOY_BEHAVIOUR_NAME" value="Default" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
   </component>
   <component name="ShelveChangesManager">
     <option name="remove_strategy" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c6be3107-816c-41c9-9bd5-595380e658be" name="Changes" comment="" />
+      <created>1696760591573</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696760591573</updated>
+      <workItem from="1725263090336" duration="75000" />
+      <workItem from="1725525584190" duration="2596000" />
+      <workItem from="1726303572999" duration="5000" />
+      <workItem from="1726303603204" duration="144000" />
+      <workItem from="1726472888539" duration="672000" />
+      <workItem from="1726585556076" duration="38000" />
+    </task>
+    <servers />
+  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
@@ -258,6 +293,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
     <option name="MAXIMUM_HISTORY_ROWS" value="500" />
+    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
 </project>
