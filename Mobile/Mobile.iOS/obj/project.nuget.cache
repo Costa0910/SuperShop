@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "gkwmGOnjeIo=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\dacos\\source\\repos\\Mobile\\Mobile\\Mobile.iOS\\Mobile.iOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dacos\\.nuget\\packages\\dryioc.dll\\4.7.7\\dryioc.dll.4.7.7.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\prism.core\\8.1.97\\prism.core.8.1.97.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\prism.dryioc.forms\\8.1.97\\prism.dryioc.forms.8.1.97.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\prism.forms\\8.1.97\\prism.forms.8.1.97.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\system.reflection.emit.lightweight\\4.3.0\\system.reflection.emit.lightweight.4.3.0.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\xamarin.essentials\\1.7.0\\xamarin.essentials.1.7.0.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\xamarin.essentials.interfaces\\1.7.0\\xamarin.essentials.interfaces.1.7.0.nupkg.sha512",
+    "C:\\Users\\dacos\\.nuget\\packages\\xamarin.forms\\5.0.0.2291\\xamarin.forms.5.0.0.2291.nupkg.sha512"
+  ],
+  "logs": []
+}
